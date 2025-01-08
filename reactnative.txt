@@ -1,0 +1,11 @@
+View
+-a view is the basic building block of UI: a small rectangular element on the screen which can be used to display text, images, or respond to user input. 
+
+<p> -> <Text>
+<img> -> <Image>
+//Displays different types of images
+<input type="text"> -> <TextInput>
+//Allows the user to enter text
+
+state is like a component’s personal data storage. State is useful for handling data that changes over time or that comes from user interaction. State gives your components memory!
+
