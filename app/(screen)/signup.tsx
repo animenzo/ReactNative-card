@@ -1,11 +1,45 @@
 import { Image, StyleSheet, TouchableOpacity,View,Text,TextInput,ScrollView, ImageBackground } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
+interface LoginError{
+  username?:string,
+  age?:string,
+  email?:string,
+  password?:string
+}
 
 const image = {uri: 'https://static.vecteezy.com/system/resources/previews/030/663/661/non_2x/calming-anime-background-high-quality-free-photo.jpg'};
 
 export default function HomeScreen() {
+  const [username,setUsername] = useState("")
+  const [email,setemail] = useState("")
+  const [age,setage] = useState("")
+  const [password,setPassword] = useState("")
+  const [errors,setErrors] = useState<LoginError>({})
+
+  const validation = ()=>{
+    const newErrors:LoginError = {}
+
+    if(username.length<1){
+      newErrors.username = "Username is required"
+    }
+    if(email.length<1){
+      newErrors.email = "Email is required"
+    }
+    if(age.length<1){
+      newErrors.age = `Age is required and should be in number`
+    }
+    if(password.length<1){
+      newErrors.password = "Password is required"
+    }
+
+    setErrors(newErrors)
+  }
+
+  
+
+
   const navigation = useNavigation();
   const handlePress = ()=>{
     console.log("Hey");
@@ -17,6 +51,13 @@ export default function HomeScreen() {
       }
     })
   }
+  const goToLogin = ()=>{
+    navigation.navigate('index')
+  }
+
+  useEffect(()=>{
+    validation()
+  },[username,age,email,password])
   
   return (
   <ScrollView style={styles.main}>
@@ -24,34 +65,50 @@ export default function HomeScreen() {
       
     
     <View style={styles.titleContainer}>
-      <Image
+      {/* <Image
           source={{
             uri: 'https://rukminim2.flixcart.com/image/850/1000/xif0q/poster/f/q/1/small-pack-of-1-naruto-poster-anime-poster-hd-photos-for-wall-original-imaeg638g5ugeakj.jpeg?q=20&crop=false',
           }}
           style={{width: 200, height: 200}}
-        />
+        /> */}
       <View style={styles.subView}>
         <Text style={styles.title} >Sign Up</Text>
         
         <Text style={styles.text}>Username</Text>
-        <TextInput style={styles.fields} placeholder='Username'></TextInput>
-
+        <TextInput style={styles.fields} placeholder='Username' onChangeText={(username=>setUsername(username))}></TextInput>
+        {errors.username &&
+          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.username}</Text>
+        }
         <Text style={styles.text}>Age</Text>
-        <TextInput style={styles.fields} placeholder='age'></TextInput>
-
+        <TextInput style={styles.fields} placeholder='age' onChangeText={(age=>setage(age))}></TextInput>
+        {errors.age &&
+          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.age}</Text>
+        }
         <Text style={styles.text}>Email</Text>
-        <TextInput style={styles.fields} placeholder='email'></TextInput>
-
+        <TextInput style={styles.fields} placeholder='email' onChangeText={(email=>setemail(email))}></TextInput>
+        {errors.email &&
+          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.email}</Text>
+        }
         <Text style={styles.text}>Password</Text>
-        <TextInput style={styles.fields} placeholder='password'></TextInput>
-        
+        <TextInput style={styles.fields} placeholder='password' onChangeText={(password=>setPassword(password))}></TextInput>
+        {errors.password &&
+          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.password}</Text>
+        }
         <TouchableOpacity onPress={handlePress} style={styles.submit}>
           
         <Text style={styles.loginText}>Register</Text>
         </TouchableOpacity>
-      </View>
-      
+
+        <View style={{flexDirection:"row",marginTop:10,marginBottom:10,alignSelf:"center"}}>
+                  <Text>Already have an account?</Text>
+                <TouchableOpacity onPress={goToLogin}>
+                  <Text style={{color:"blue",fontWeight:600}}> Login</Text>
+                </TouchableOpacity>
+                </View>
     </View>
+      </View>
+
+    
     </ImageBackground>
     
     </ScrollView>
@@ -105,7 +162,7 @@ const styles = StyleSheet.create({
     marginLeft:170,
     fontSize:38,
     fontWeight:'bold',
-    marginBottom:20,
+    marginBottom:10,
     elevation:10,
     shadowColor:'#ff6f3c',
     
@@ -133,23 +190,24 @@ const styles = StyleSheet.create({
     marginLeft:170
   },
   submit:{
-    marginTop:55,
+    marginTop:25,
     backgroundColor:'cyan',
-    margin:70,
-    padding:10,
+    marginHorizontal:"auto",
+    paddingHorizontal:100,
     borderRadius: 10,
     shadowColor:'#000',
     shadowOpacity:0.8,
     shadowRadius:10,
     // elevation:10,
-    shadowOffset:{width:5,height:5}
+    shadowOffset:{width:5,height:5},
+    paddingVertical:10
     
     
   },
   loginText:{
     fontWeight:'bold',
     fontSize:18,
-    marginLeft:120,
+    marginHorizontal:"auto"
   }
 
 

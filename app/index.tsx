@@ -1,24 +1,60 @@
-import { Image, StyleSheet, TouchableOpacity, View, Text, TextInput, ScrollView } from 'react-native';
-import React from 'react';
-
+import { Image, StyleSheet, TouchableOpacity, View, Text, TextInput, ScrollView, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
-import { useRoute } from '@react-navigation/native';
+
+interface LoginError {
+  email?: string;
+  password?: string;
+}
+
 export default function HomeScreen() {
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<LoginError>({});
   const navigation = useNavigation();
- 
-  const handlePress = () => {
-    console.log("Login button pressed");
-    navigation.navigate("(screen)",{
-      
-    }); // Replace "(screen)" with your target screen name.
+  
+  const validation = () => {
+    const newErrors: LoginError = {};
+    if (email.length < 1) {newErrors.email = "Email is required."}
+    if (password.length<1) {newErrors.password = "Password is required."} 
+    setErrors(newErrors);
+    console.log(email,password)
   };
+
+  const goToSignup = ()=>{
+    navigation.navigate('(screen)',{
+      screen: 'signup'
+    })
+  }
+   
+    const handlePress = () => {
+     if(email.length !== 0 && password.length !== 0){
+      navigation.navigate("(tabs)",{
+        screen: "homescreen",
+      
+    }); 
+     }
+      // console.log("Login button pressed");
+     
+
+    };
+  
+  
+
+  useEffect(()=>{
+
+    validation()
+    
+  },[email,password])
+
+  console.log(email,password);
   return (
     <ScrollView style={styles.main}>
       <View style={styles.container}>
         {/* Profile Image */}
         <Image
           source={{
-            uri: 'https://rukminim2.flixcart.com/image/850/1000/xif0q/poster/f/q/1/small-pack-of-1-naruto-poster-anime-poster-hd-photos-for-wall-original-imaeg638g5ugeakj.jpeg?q=20&crop=false',
+            uri: 'https://rukminim2.flixcart.com/image/850/1000/xif0q/poster/f/q/1/small-pack-of-1-naruto-poster-anime-poster-hd-photos-for-wall-original-imaeg638g5ugeakj.jpeg?q=20',
           }}
           style={styles.profileImage}
         />
@@ -27,9 +63,17 @@ export default function HomeScreen() {
         <View style={styles.formContainer}>
           <Text style={styles.title}>Login</Text>
 
-          {/* Username */}
-          <Text style={styles.label}>Username</Text>
-          <TextInput style={styles.inputField} placeholder="Enter your username" placeholderTextColor="#888" />
+          {/* Email */}
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Enter your email"
+            placeholderTextColor="#888"
+            value={email}
+            onChangeText={(email) => setemail(email)} // Updates state
+          />
+
+          {errors.email && <Text style={{ color: "red" }}>{errors.email}</Text>}
 
           {/* Password */}
           <Text style={styles.label}>Password</Text>
@@ -38,12 +82,21 @@ export default function HomeScreen() {
             placeholder="Enter your password"
             placeholderTextColor="#888"
             secureTextEntry={true}
+            value={password}
+            onChangeText={(password)=>setPassword(password)} // Updates state
           />
+          {errors.password && <Text style={{ color: "red" }}>{errors.password}</Text>}
 
           {/* Login Button */}
           <TouchableOpacity onPress={handlePress} style={styles.loginButton}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
+          <View style={{flexDirection:"row",marginTop:10}}>
+            <Text>Don't have an account?</Text>
+          <TouchableOpacity onPress={goToSignup}>
+            <Text style={{color:"blue",fontWeight:600}}> Sign up</Text>
+          </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -106,7 +159,7 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#4CAF50',
     paddingVertical: 12,
-    borderRadius: 8,
+     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
@@ -114,5 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
+  
   },
-});
+})

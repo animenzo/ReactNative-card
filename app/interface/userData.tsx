@@ -1,4 +1,4 @@
-interface userData{
+export interface userData{
     userId:String,
     name: {
       firstname: String,
@@ -16,7 +16,7 @@ interface userData{
 
 }
 
-interface address{
+export interface address{
     address?: {
         city: String,
         state: String,

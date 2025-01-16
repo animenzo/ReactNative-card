@@ -11,9 +11,8 @@ const route = useRoute<RouteProp<{params:{name:String, age:Number}},'params'>>()
   
     const handlePress = () => {
       console.log("Logout button pressed");
-      navigation.navigate("(tabs)",{
-        screen: "index",
-      }); // Replace "(screen)" with your target screen name.
+      navigation.navigate("index",{
+      }); 
     };
 
   return (
