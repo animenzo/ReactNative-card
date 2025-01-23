@@ -1,11 +1,14 @@
 import { Image, StyleSheet, TouchableOpacity, View, Text, TextInput, ScrollView, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
+import {LoginError} from './interface/LoginError'
+import axios from 'axios';
+// interface LoginError {
+//   email?: string;
+//   password?: string;
+// }
 
-interface LoginError {
-  email?: string;
-  password?: string;
-}
+
 
 export default function HomeScreen() {
   const [email, setemail] = useState("");
@@ -14,12 +17,17 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   
   const validation = () => {
+    
+
     const newErrors: LoginError = {};
     if (email.length < 1) {newErrors.email = "Email is required."}
     if (password.length<1) {newErrors.password = "Password is required."} 
     setErrors(newErrors);
     console.log(email,password)
   };
+
+
+
 
   const goToSignup = ()=>{
     navigation.navigate('(screen)',{
@@ -51,10 +59,10 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.main}>
       <View style={styles.container}>
-        {/* Profile Image */}
+       
         <Image
           source={{
-            uri: 'https://rukminim2.flixcart.com/image/850/1000/xif0q/poster/f/q/1/small-pack-of-1-naruto-poster-anime-poster-hd-photos-for-wall-original-imaeg638g5ugeakj.jpeg?q=20',
+            uri: 'https://img.freepik.com/free-psd/instagram-application-logo_23-2151544094.jpg',
           }}
           style={styles.profileImage}
         />
@@ -87,7 +95,7 @@ export default function HomeScreen() {
           />
           {errors.password && <Text style={{ color: "red" }}>{errors.password}</Text>}
 
-          {/* Login Button */}
+
           <TouchableOpacity onPress={handlePress} style={styles.loginButton}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>

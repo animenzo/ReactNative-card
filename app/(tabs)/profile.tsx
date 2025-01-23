@@ -1,124 +1,146 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
-import React from 'react';
+import { MaterialIcons } from "@expo/vector-icons";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
+import React, { useState } from "react";
 
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+
+const userData = [
+  {
+    id:1,
+    image:"https://images.wondershare.com/filmora/article-images/2-kakashi-hatake.jpg"
+  },
+  
+]
+
 
 export default function ProfileScreen() {
-const route = useRoute<RouteProp<{params:{name:String, age:Number}},'params'>>();
- const {name, age} = route.params||{}
+  const [selected,setSelected] = useState(1)
+  const route =
+    useRoute<RouteProp<{ params: { name: String; age: Number } }, "params">>();
+  const { name, age } = route.params || {};
   const navigation = useNavigation();
-  
-    const handlePress = () => {
-      console.log("Logout button pressed");
-      navigation.navigate("index",{
-      }); 
-    };
+
+  const handleLogOut = () => {
+    console.log("Logout button pressed");
+    navigation.navigate("index", {});
+  };
+
+  const handleEditProfile = ()=>{
+    navigation.navigate('(screen)',{
+      screen:'edit'
+    })
+  }
+
+
 
   return (
     <ScrollView style={styles.main}>
-       <TouchableOpacity onPress={handlePress}>
-                <Text style={styles.signOut}>Sign Out{name}</Text>
-          </TouchableOpacity>
-      <View style={styles.profileHeader}>
-        
-        <Image
-          style={styles.profileImage}
-          source={{
-            uri: 'https://beebom.com/wp-content/uploads/2024/06/giyu-tomioka-demon-slayer.jpg?w=1024', 
-          }}
-        />
-        <View style={styles.statsContainer}>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>60</Text>
-            <Text style={styles.statLabel}>Posts</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>200</Text>
-            <Text style={styles.statLabel}>Followers</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>237</Text>
-            <Text style={styles.statLabel}>Following</Text>
+      <View style={{paddingTop:10}}>
+        <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+          <Text style={{fontSize:25,fontWeight:500,color:'#000'}}>piyush</Text>
+          <View style={{flexDirection:'row',alignItems:"center"}}>
+            <TouchableOpacity style={{marginLeft:5}}><Text>
+            <MaterialIcons name="add" size={28}/></Text></TouchableOpacity>
+            <TouchableOpacity><Text>
+            <MaterialIcons name="menu" size={28}  />
+              </Text></TouchableOpacity>
           </View>
         </View>
       </View>
+      <View style={styles.profileContainer}>
+        <Image
+          source={{
+            uri: "https://i.pinimg.com/736x/0d/bf/f6/0dbff6db19f1e53b0552b60fb6edae47.jpg",
+          }}
+          style={styles.instaImage}
+        />
+        <View style={{width:75,alignItems:'center'}}>
+          <Text style={styles.profileStats}>4</Text>
+          <Text style={{fontSize:16,fontWeight:400,color:'#333'}}>Posts</Text>
+        </View>
 
-      {/* Bio Section */}
-      <View style={styles.bioSection}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.bioText}>
-          Developer | Tech Enthusiast |
+        <View style={{width:75,alignItems:'center'}}>
+          <Text style={styles.profileStats}>489</Text>
+          <Text style={{fontSize:16,fontWeight:400,color:'#333'}}>Followers</Text>
+        </View>
+
+        <View style={{width:75,alignItems:'center'}}>
+          <Text style={styles.profileStats}>145</Text>
+          <Text style={{fontSize:16,fontWeight:400,color:'#333'}}>Following</Text>
+        </View>
+      </View>
+      <View >
+        <Text style={{fontSize:18,color:'black',marginTop:10}}>Piyush Tailor</Text>
+        <Text style={{fontSize:16,color:'black'}}>piyush.tailor@gmail.com
         </Text>
-        <Text style={styles.contactInfo}>Email: something@gmail.com</Text>
-        <Text style={styles.contactInfo}>Phone: 8888888888</Text>
+        <Text style={{fontSize:18}}>See Translation</Text>
+        <View style={styles.profileButton}>
+          <TouchableOpacity onPress={handleEditProfile}>
+          <Text style={{backgroundColor:'#E1E1E1',width:150,paddingHorizontal:10,paddingVertical:8,borderRadius:5,textAlign:'center'}}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+          <Text style={{backgroundColor:'#E1E1E1',width:150,paddingHorizontal:10,paddingVertical:8,borderRadius:5,textAlign:'center'}}>Share Profile</Text>
+          </TouchableOpacity>
+          
+          </View>
+      </View>
+      <View style={{marginTop:10}}>
+      <View style={{flexDirection:'row',justifyContent:"space-between",width:196,paddingBottom:15}}>
+      
+        <TouchableOpacity ><Text style={{alignSelf:'center'}}>          <MaterialIcons size={28} name="grid-on"></MaterialIcons>
+        </Text>
+
+        </TouchableOpacity>
+        <TouchableOpacity ><Text style={{alignSelf:'center'}}>             <MaterialIcons size={28} name="account-box"></MaterialIcons>
+        </Text>
+        </TouchableOpacity>
+
       </View>
 
-    
+     <View>
+      <Image style={{height:130,width:130}} source={{uri:'https://images.wondershare.com/filmora/article-images/2-kakashi-hatake.jpg'}}></Image>
+     </View>
+      </View>
+      
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
- signOut:{
-    fontSize: 20,
-    fontWeight: 'bold',
-    color:"red",
-    margin:10
-  },
   main: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
   },
-  profileHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+  profileContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop:20
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginRight: 20,
+  instaImage: {
+    height: 80,
+    width: 80,
+    borderRadius:'50%'
   },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flex: 1,
+  profileStats:{
+    fontSize: 24,
+    color: '#000',
+    fontWeight:600
   },
-  statBox: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#777',
-  },
-  bioSection: {
-    padding: 20,
-    backgroundColor: '#fff',
-    marginBottom: 10,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  bioText: {
-    fontSize: 14,
-    color: '#555',
-    marginBottom: 10,
-  },
-  contactInfo: {
-    fontSize: 14,
-    color: '#555',
-  },
-
-
+  profileButton:{
+    flexDirection:'row',
+    marginTop:15,
+    justifyContent:'space-between',
+    marginHorizontal:15
+  }
 });

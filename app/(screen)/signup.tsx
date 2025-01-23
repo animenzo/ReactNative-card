@@ -1,217 +1,215 @@
-import { Image, StyleSheet, TouchableOpacity,View,Text,TextInput,ScrollView, ImageBackground } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useNavigation } from 'expo-router';
-
-interface LoginError{
-  username?:string,
-  age?:string,
-  email?:string,
-  password?:string
-}
-
-const image = {uri: 'https://static.vecteezy.com/system/resources/previews/030/663/661/non_2x/calming-anime-background-high-quality-free-photo.jpg'};
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  Alert,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "expo-router";
+import { LoginError } from "../interface/LoginError";
+import axios from "axios";
+// interface LoginError {
+//   email?: string;
+//   password?: string;
+// }
 
 export default function HomeScreen() {
-  const [username,setUsername] = useState("")
-  const [email,setemail] = useState("")
-  const [age,setage] = useState("")
-  const [password,setPassword] = useState("")
-  const [errors,setErrors] = useState<LoginError>({})
-
-  const validation = ()=>{
-    const newErrors:LoginError = {}
-
-    if(username.length<1){
-      newErrors.username = "Username is required"
-    }
-    if(email.length<1){
-      newErrors.email = "Email is required"
-    }
-    if(age.length<1){
-      newErrors.age = `Age is required and should be in number`
-    }
-    if(password.length<1){
-      newErrors.password = "Password is required"
-    }
-
-    setErrors(newErrors)
-  }
-
-  
-
-
+  const [username, setUsername] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setage] = useState("");
+  const [errors, setErrors] = useState<LoginError>({});
   const navigation = useNavigation();
-  const handlePress = ()=>{
-    console.log("Hey");
-    navigation.navigate("(screen)",{
-      screen:"profile",
-      params:{
-        name:"john",
-        age:21
-      }
-    })
-  }
-  const goToLogin = ()=>{
-    navigation.navigate('index')
-  }
 
-  useEffect(()=>{
-    validation()
-  },[username,age,email,password])
-  
-  return (
-  <ScrollView style={styles.main}>
- <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      
-    
-    <View style={styles.titleContainer}>
-      {/* <Image
-          source={{
-            uri: 'https://rukminim2.flixcart.com/image/850/1000/xif0q/poster/f/q/1/small-pack-of-1-naruto-poster-anime-poster-hd-photos-for-wall-original-imaeg638g5ugeakj.jpeg?q=20&crop=false',
-          }}
-          style={{width: 200, height: 200}}
-        /> */}
-      <View style={styles.subView}>
-        <Text style={styles.title} >Sign Up</Text>
+  const validation = () => {
+    const newErrors: LoginError = {};
+
+    if (username.length < 1) {
+      newErrors.username = "Username is required";
+    }
+    if (email.length < 1) {
+      newErrors.email = "Email is required";
+    }
+    if (age.length < 1) {
+      newErrors.age = `Age is required and should be in number`;
+    }
+    if (password.length < 1) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+  };
+
+  const handlePress = () => {
+    if (email.length !== 0 && password.length !== 0) {
+      navigation.navigate("(screen)", {
+        screen: "profile",
         
-        <Text style={styles.text}>Username</Text>
-        <TextInput style={styles.fields} placeholder='Username' onChangeText={(username=>setUsername(username))}></TextInput>
-        {errors.username &&
-          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.username}</Text>
-        }
-        <Text style={styles.text}>Age</Text>
-        <TextInput style={styles.fields} placeholder='age' onChangeText={(age=>setage(age))}></TextInput>
-        {errors.age &&
-          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.age}</Text>
-        }
-        <Text style={styles.text}>Email</Text>
-        <TextInput style={styles.fields} placeholder='email' onChangeText={(email=>setemail(email))}></TextInput>
-        {errors.email &&
-          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.email}</Text>
-        }
-        <Text style={styles.text}>Password</Text>
-        <TextInput style={styles.fields} placeholder='password' onChangeText={(password=>setPassword(password))}></TextInput>
-        {errors.password &&
-          <Text style={{color:"red",fontWeight:500,marginLeft:35,marginTop:5}}>{errors.password}</Text>
-        }
-        <TouchableOpacity onPress={handlePress} style={styles.submit}>
-          
-        <Text style={styles.loginText}>Register</Text>
-        </TouchableOpacity>
+      });
+    }
 
-        <View style={{flexDirection:"row",marginTop:10,marginBottom:10,alignSelf:"center"}}>
-                  <Text>Already have an account?</Text>
-                <TouchableOpacity onPress={goToLogin}>
-                  <Text style={{color:"blue",fontWeight:600}}> Login</Text>
-                </TouchableOpacity>
-                </View>
-    </View>
+    // console.log("Login button pressed");
+  };
+
+  const goToLogin = () => {
+    navigation.navigate("index");
+  };
+
+  useEffect(() => {
+    validation();
+  }, [username, age, email, password]);
+
+  return (
+    <ScrollView style={styles.main}>
+      <View style={styles.container}>
+        <Image
+          source={{
+            uri: "https://logos-world.net/wp-content/uploads/2020/05/Instagram-Logo-2016-present.png",
+          }}
+          style={styles.profileImage}
+        />
+
+        {/* Login Form */}
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Sign Up</Text>
+          {/* Name */}
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Enter your username"
+            placeholderTextColor="#888"
+            value={email}
+            onChangeText={(name) => setUsername(name)} // Updates state
+          />
+
+          {errors.username && (
+            <Text style={{ color: "red" }}>{errors.username}</Text>
+          )}
+
+          {/* age */}
+          <Text style={styles.label}>Age</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Enter your age"
+            placeholderTextColor="#888"
+            value={email}
+            onChangeText={(name) => setUsername(name)} // Updates state
+          />
+
+          {errors.username && (
+            <Text style={{ color: "red" }}>{errors.username}</Text>
+          )}
+
+          {/* Email */}
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Enter your email"
+            placeholderTextColor="#888"
+            value={email}
+            onChangeText={(email) => setemail(email)} // Updates state
+          />
+
+          {errors.email && <Text style={{ color: "red" }}>{errors.email}</Text>}
+
+          {/* Password */}
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Enter your password"
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={(password) => setPassword(password)} // Updates state
+          />
+          {errors.password && (
+            <Text style={{ color: "red" }}>{errors.password}</Text>
+          )}
+
+          <TouchableOpacity onPress={handlePress} style={styles.loginButton}>
+            <Text style={styles.loginButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            <Text>Already have an account?</Text>
+            <TouchableOpacity onPress={goToLogin}>
+              <Text style={{ color: "blue", fontWeight: 600 }}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-
-    
-    </ImageBackground>
-    
     </ScrollView>
-
   );
 }
-
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
-    
+    backgroundColor: "#fff",
+    height:"100%",
   },
-  image: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    resizeMode: 'cover', // Ensures the image scales proportionally to cover the entire area
-    width: '100%',      // Make the image fill the width of the container
-    height: '200%'
-  },
-  titleContainer: {
-    
-    boxSizing:'border-box',
-    backgroundColor:'zinc',
-    height: '100%',
-    width:'90%',
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
-    flexDirection:'column',
-  },
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 60,
+    backgroundColor: "#fff",
+      marginBottom:20,
 
-  subView:{
-    backgroundColor:'orange',
-    borderColor:'black',
-    borderWidth:2,
-    minWidth:450,
-    minHeight:100,
-    marginTop:'1%',
+  },
+  profileImage: {
+    width: 190,
+    height: 70,
+    marginBottom: 5,
+  },
+  formContainer: {
+    width: "90%",
+    maxWidth: 400,
+    backgroundColor: "#f9f9f9",
     borderRadius: 10,
-    shadowColor:'#ff6f3c',
-    shadowOpacity:0.8,
-    shadowRadius:10,
-    elevation:10,
-    shadowOffset:{width:5,height:5}
-    
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
-  title:{
-    color:'white',
-    marginLeft:170,
-    fontSize:38,
-    fontWeight:'bold',
-    marginBottom:10,
-    elevation:10,
-    shadowColor:'#ff6f3c',
-    
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
   },
-  fields:{
-    backgroundColor:'white',
-    marginLeft:20,
-    marginRight:20,
-    padding:10,
-    color:'grey',
-    fontSize:16,
-    borderRadius: 10,
-    shadowColor:'#000',
-    shadowOpacity:0.8,
-    shadowRadius:10,
-
-    // elevation:10,
-    shadowOffset:{width:5,height:5},
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#555",
   },
-  text:{
-    color:'black',
-    margin:10,
-    fontSize:24,
-    fontWeight:'bold',
-    marginLeft:170
+  inputField: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#333",
   },
-  submit:{
-    marginTop:25,
-    backgroundColor:'cyan',
-    marginHorizontal:"auto",
-    paddingHorizontal:100,
-    borderRadius: 10,
-    shadowColor:'#000',
-    shadowOpacity:0.8,
-    shadowRadius:10,
-    // elevation:10,
-    shadowOffset:{width:5,height:5},
-    paddingVertical:10
-    
-    
+  loginButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
   },
-  loginText:{
-    fontWeight:'bold',
-    fontSize:18,
-    marginHorizontal:"auto"
-  }
-
-
-
-  
-
+  loginButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
 });
