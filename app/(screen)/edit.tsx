@@ -9,39 +9,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-
-interface EditProfileProps {}
-
-const EditProfile: React.FC<EditProfileProps> = () => {
+const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [username, setUsername] = useState<string>("John Doe");
-  const [bio, setBio] = useState<string>("Photographer | Traveler | Dreamer");
-  const [website, setWebsite] = useState<string>("https://johndoe.com");
-
-  const selectImage = async (): Promise<void> => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
-  };
-
-  const saveChanges = (): void => {
-    // Placeholder for saving changes
-    Alert.alert("Profile Saved", "Your changes have been successfully saved.");
-    console.log("Profile saved:", { username, bio, website, profileImage });
-  };
-
+  const [username, setUsername] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.profileImageContainer}>
-        <TouchableOpacity onPress={selectImage}>
+        <TouchableOpacity >
           <Image
             source={
               profileImage
@@ -51,7 +26,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             style={styles.profileImage}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={selectImage}>
+        <TouchableOpacity >
           <Text style={styles.changePhotoText}>Change Profile Photo</Text>
         </TouchableOpacity>
       </View>
@@ -77,17 +52,8 @@ const EditProfile: React.FC<EditProfileProps> = () => {
           />
         </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Website</Text>
-          <TextInput
-            style={styles.input}
-            value={website}
-            onChangeText={setWebsite}
-            keyboardType="url"
-          />
-        </View>
 
-        <TouchableOpacity style={styles.saveButton} onPress={saveChanges}>
+        <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.saveButtonText}>Save Changes</Text>
         </TouchableOpacity>
       </View>
